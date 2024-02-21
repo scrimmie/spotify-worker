@@ -183,7 +183,6 @@ router.get('/currentTrack', async (request, env, context) => {
 	const currentlyPlayingResponse = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
-	console.log(currentlyPlayingResponse.status);
 	if (currentlyPlayingResponse.status === 204) {
 		return '';
 	}
