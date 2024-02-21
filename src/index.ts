@@ -1,4 +1,4 @@
-import { Router, error, json } from 'itty-router';
+import { Router, error, json, withParams } from 'itty-router';
 
 /**
  * Welcome to Cloudflare Workers! This is your first worker.
@@ -15,6 +15,7 @@ export interface Env {
 	KV_DAVID_PORTFOLIO: KVNamespace;
 	SPOTIFY_CLIENT_ID: string;
 	SPOTIFY_CLIENT_SECRET: string;
+	PORTFOLIO_SECRET: string;
 }
 
 export interface SpotifyPlayerResponse {
@@ -167,6 +168,15 @@ async function getAccessToken(env: Env) {
 	});
 	return accessToken;
 }
+
+async function withSecret(req: Request, env: Env) {
+	const authHeader = req.headers.get('Authorization')?.split(' ');
+	if (authHeader?.length !== 2 || authHeader[0] !== 'Basic' || authHeader[1] !== env.PORTFOLIO_SECRET) {
+		return new Response('Unauthorized', { status: 401 });
+	}
+}
+
+router.all('*', (req, env) => withSecret(req, env));
 
 router.get('/currentTrack', async (request, env, context) => {
 	const accessToken = await getAccessToken(env);
