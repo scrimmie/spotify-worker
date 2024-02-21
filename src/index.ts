@@ -1,4 +1,4 @@
-import { Router, error, json, withParams } from 'itty-router';
+import { Router, error, json } from 'itty-router';
 
 /**
  * Welcome to Cloudflare Workers! This is your first worker.
