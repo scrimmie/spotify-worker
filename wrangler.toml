@@ -8,6 +8,7 @@ compatibility_flags = [ "nodejs_compat" ]
 # Docs: https://developers.cloudflare.com/workers/platform/environment-variables
 # [vars]
 # MY_VARIABLE = "production_value"
+SPOTIFY_CLIENT_ID="e4f74f8646ff4da2a8f02f785c49be45"
 
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
 # Docs: https://developers.cloudflare.com/workers/runtime-apis/kv
