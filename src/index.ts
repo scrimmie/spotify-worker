@@ -168,6 +168,7 @@ async function getAccessToken(env: Env) {
 	await env.KV_DAVID_PORTFOLIO.put(`access_token:${env.SPOTIFY_CLIENT_ID}`, accessToken, {
 		expirationTtl: 3500,
 	});
+	return accessToken;
 }
 
 async function withSecret(req: Request, env: Env) {
@@ -186,7 +187,7 @@ router.get('/currentTrack', async (request, env, context) => {
 		headers: { Authorization: `Bearer ${accessToken}` },
 	});
 	if (currentlyPlayingResponse.status === 204) {
-		return '';
+		return corsify(json({ isPlaying: false }));
 	}
 	const currentlyPlaying: SpotifyPlayerResponse = await currentlyPlayingResponse.json();
 	return corsify(
@@ -202,5 +203,7 @@ router.all('*', () => error(404));
 
 export default {
 	fetch: (request: Request, env: Env, ctx: ExecutionContext) =>
-		router.handle(request, env, ctx).catch((err) => corsify(error(500, 'something went wrong'))),
+		router.handle(request, env, ctx).catch((err) => {
+			return corsify(error(500, 'something went wrong'));
+		}),
 };
