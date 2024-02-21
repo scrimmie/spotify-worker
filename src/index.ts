@@ -12,7 +12,7 @@ import { createCors } from 'itty-cors';
  */
 
 const router = Router();
-const { preflight } = createCors();
+const { preflight, corsify } = createCors({ origins: ['*'] });
 export interface Env {
 	KV_DAVID_PORTFOLIO: KVNamespace;
 	SPOTIFY_CLIENT_ID: string;
@@ -168,13 +168,12 @@ async function getAccessToken(env: Env) {
 	await env.KV_DAVID_PORTFOLIO.put(`access_token:${env.SPOTIFY_CLIENT_ID}`, accessToken, {
 		expirationTtl: 3500,
 	});
-	return accessToken;
 }
 
 async function withSecret(req: Request, env: Env) {
 	const authHeader = req.headers.get('Authorization')?.split(' ');
 	if (authHeader?.length !== 2 || authHeader[0] !== 'Basic' || authHeader[1] !== env.PORTFOLIO_SECRET) {
-		return new Response('Unauthorized', { status: 401 });
+		return corsify(error(401));
 	}
 }
 
@@ -190,15 +189,18 @@ router.get('/currentTrack', async (request, env, context) => {
 		return '';
 	}
 	const currentlyPlaying: SpotifyPlayerResponse = await currentlyPlayingResponse.json();
-	return {
-		isPlaying: currentlyPlaying.is_playing,
-		currentTrack: currentlyPlaying.item,
-		currentTrackProgress: currentlyPlaying.progress_ms,
-	};
+	return corsify(
+		json({
+			isPlaying: currentlyPlaying.is_playing,
+			currentTrack: currentlyPlaying.item,
+			currentTrackProgress: currentlyPlaying.progress_ms,
+		})
+	);
 });
 
 router.all('*', () => error(404));
 
 export default {
-	fetch: (request: Request, env: Env, ctx: ExecutionContext) => router.handle(request, env, ctx).then(json).catch(error),
+	fetch: (request: Request, env: Env, ctx: ExecutionContext) =>
+		router.handle(request, env, ctx).catch((err) => corsify(error(500, 'something went wrong'))),
 };
