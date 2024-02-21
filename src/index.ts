@@ -1,4 +1,5 @@
 import { Router, error, json } from 'itty-router';
+import { createCors } from 'itty-cors';
 
 /**
  * Welcome to Cloudflare Workers! This is your first worker.
@@ -11,6 +12,7 @@ import { Router, error, json } from 'itty-router';
  */
 
 const router = Router();
+const { preflight } = createCors();
 export interface Env {
 	KV_DAVID_PORTFOLIO: KVNamespace;
 	SPOTIFY_CLIENT_ID: string;
@@ -176,6 +178,7 @@ async function withSecret(req: Request, env: Env) {
 	}
 }
 
+router.all('*', preflight);
 router.all('*', (req, env) => withSecret(req, env));
 
 router.get('/currentTrack', async (request, env, context) => {
@@ -194,7 +197,7 @@ router.get('/currentTrack', async (request, env, context) => {
 	};
 });
 
-router.all('*', () => new Response('404, not found!', { status: 404 }));
+router.all('*', () => error(404));
 
 export default {
 	fetch: (request: Request, env: Env, ctx: ExecutionContext) => router.handle(request, env, ctx).then(json).catch(error),
