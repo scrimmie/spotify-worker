@@ -406,16 +406,6 @@ is-number@^7.0.0:
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
 
-itty-cors@^0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/itty-cors/-/itty-cors-0.3.6.tgz#25fae83ee23203c6d35188b9352a1d17b21a5271"
-  integrity sha512-VlDDB9CLneCyjqtg8kShl6oBZrJxxwKd8sXWrYC77H6BcW9sDMRDwx7JgCB2T+18pQv/Tau3OIlchEKrEHKKKQ==
-
-itty-router@^4.0.27:
-  version "4.0.27"
-  resolved "https://registry.yarnpkg.com/itty-router/-/itty-router-4.0.27.tgz#ea6ffcf0482b2e4ce56e07769ac605f52d84d22b"
-  integrity sha512-Q3/GOE2EJvyu3hhxGN3WDWh3QNg4v7h1KFx/jSLcIOOkpSI1jUFTgGefEESXon4j5YwqCIf0DEemjiVAFSBiUw==
-
 magic-string@^0.25.3:
   version "0.25.9"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.9.tgz#de7f9faf91ef8a1c91d02c2e5314c8277dbcdd1c"
