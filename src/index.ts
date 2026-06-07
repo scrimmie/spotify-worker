@@ -150,6 +150,11 @@ function withCors(request: Request, response: Response): Response {
 	for (const [key, value] of Object.entries(corsHeaders(request))) {
 		res.headers.set(key, value);
 	}
+	// Now-playing data is volatile. The short edge cache (caches.default) above
+	// is enough to throttle Spotify calls; the *client* must never cache, or a
+	// paused `isPlaying:false` gets pinned in the browser/CDN (the zone's Browser
+	// Cache TTL was inflating our max-age=10 to hours), showing "idle" forever.
+	res.headers.set('Cache-Control', 'no-store');
 	return res;
 }
 
